@@ -1,6 +1,8 @@
 package pki.certificate;
 
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x509.*;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
@@ -13,8 +15,7 @@ import pki.common.Constants;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.security.SecureRandom;
-import java.security.Security;
+import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
@@ -47,6 +48,25 @@ public class AutoSignCertificate {
         Date endDate = new Date(calendar.getTimeInMillis());
 
         /** 2. Extension Fields **/
+        // 2-1. authority key identifier
+        AuthorityKeyIdentifier aki = new AuthorityKeyIdentifier(SubjectPublicKeyInfo.getInstance(Constants.issuerKeyPair.getPublic().getEncoded()).getEncoded());
+        Extension authorityKeyIdentifier = Extension.create(Extension.authorityKeyIdentifier, false, aki);
+
+        // 2-2. subject key identifier
+        SubjectPublicKeyInfo ski = pkcs10CertificationRequest.getSubjectPublicKeyInfo();
+        Extension subjectKeyIdentifier = Extension.create(Extension.subjectKeyIdentifier, false, ski);
+
+        // 2-3. certificate policy
+        CertificatePolicies cp = new CertificatePolicies(new PolicyInformation(new ASN1ObjectIdentifier(Constants.policyOid)));
+        Extension certificatePolicy = Extension.create(Extension.certificatePolicies, true, cp);
+
+        // 2-4. key usage
+        KeyUsage ku = new KeyUsage(KeyUsage.digitalSignature | KeyUsage.nonRepudiation);
+        Extension keyUsage = Extension.create(Extension.keyUsage, true, ku);
+
+        // 2-5. basic constraints
+        BasicConstraints bc = new BasicConstraints(false);
+        Extension basicConstraints = Extension.create(Extension.basicConstraints, true, bc);
 
         /** 3. Certificate Signing Info **/
         ContentSigner contentSigner = new JcaContentSignerBuilder(Constants.signatureAlg).setProvider("BC").build(Constants.issuerKeyPair.getPrivate());
@@ -61,6 +81,11 @@ public class AutoSignCertificate {
                 subjectName,
                 Constants.issuerKeyPair.getPublic()
         );
+        certificateBuilder.addExtension(authorityKeyIdentifier);
+        certificateBuilder.addExtension(subjectKeyIdentifier);
+        certificateBuilder.addExtension(certificatePolicy);
+        certificateBuilder.addExtension(keyUsage);
+        certificateBuilder.addExtension(basicConstraints);
 
         // 4-2. certificate holder
         X509CertificateHolder certificateHolder = certificateBuilder.build(contentSigner);
