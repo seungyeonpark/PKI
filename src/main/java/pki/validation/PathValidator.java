@@ -12,7 +12,6 @@ import java.util.*;
 public class PathValidator {
 
     public void validateCertPath(X509Certificate rootCaCert, X509Certificate caCert, X509Certificate leafCert) throws CertificateException, NoSuchProviderException, InvalidAlgorithmParameterException, NoSuchAlgorithmException {
-
         Security.addProvider(new BouncyCastleProvider());
         CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509", "BC");
 

@@ -1,4 +1,4 @@
-package pki.common;
+package pki.common.util;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
@@ -9,7 +9,7 @@ import java.security.spec.ECGenParameterSpec;
 public class KeyUtil {
 
     public static KeyPair generateRSAKeyPair() {
-        KeyPairGenerator keyPairGenerator = null;
+        KeyPairGenerator keyPairGenerator;
         try {
             keyPairGenerator = KeyPairGenerator.getInstance("RSA");
         } catch (NoSuchAlgorithmException e) {
