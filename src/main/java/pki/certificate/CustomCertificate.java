@@ -40,11 +40,11 @@ public class CustomCertificate {
 
     private TBSCertificate getTBSCertificate(Issuer issuer, byte[] certificateRequestInfo) throws IOException {
 
-        // 1. Process CSR message
+        /* 1. Process CSR message */
         PKCS10CertificationRequest pkcs10CertificationRequest = new PKCS10CertificationRequest(certificateRequestInfo);
         SubjectPublicKeyInfo subjectPublicKeyInfo = pkcs10CertificationRequest.getSubjectPublicKeyInfo();
 
-        // 2. Generate TBSCertificate
+        /* 2. Generate TBSCertificate */
         V3TBSCertificateGenerator tbsGen = new V3TBSCertificateGenerator();
 
         // 2-1. serial number
@@ -77,7 +77,7 @@ public class CustomCertificate {
 
         // 2-7. extension values
         AuthorityKeyIdentifier aki = new AuthorityKeyIdentifier(SubjectPublicKeyInfo.getInstance(issuer.getIssuerKeyPair().getPublic().getEncoded()).getEncoded());
-        SubjectPublicKeyInfo ski = pkcs10CertificationRequest.getSubjectPublicKeyInfo();
+        SubjectKeyIdentifier ski = new SubjectKeyIdentifier(subjectPublicKeyInfo.getEncoded());
 
         List<Extension> extensionList = issuer.getSubjectExtensionList(aki, ski);
         if (issuerName.equals(subjectName)) {
@@ -90,7 +90,7 @@ public class CustomCertificate {
         }
         tbsGen.setExtensions(extensionsGenerator.generate());
 
-        // 3. TBSCertificate
+        /* 3. TBSCertificate */
         return tbsGen.generateTBSCertificate();
     }
 

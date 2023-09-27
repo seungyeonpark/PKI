@@ -24,7 +24,7 @@ public abstract class Issuer {
 
     protected String policyOid;
 
-    public List<Extension> getSubjectExtensionList(AuthorityKeyIdentifier aki, SubjectPublicKeyInfo ski) throws IOException {
+    public List<Extension> getSubjectExtensionList(AuthorityKeyIdentifier aki, SubjectKeyIdentifier ski) throws IOException {
         List<Extension> extensionList = new ArrayList<>();
 
         // 1. authority key identifier

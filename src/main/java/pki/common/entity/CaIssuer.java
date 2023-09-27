@@ -1,5 +1,6 @@
 package pki.common.entity;
 
+import lombok.Getter;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.bouncycastle.asn1.x500.X500Name;
@@ -10,19 +11,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class CaIssuer extends Issuer {
 
-    public CaIssuer() {
-        super.issuerName = new X500Name("CN=Private CA, O=Certification Authority, L=Seoul, C=KR");
+    public CaIssuer(String issuerDn, String policyOid) {
+        super.issuerName = new X500Name(issuerDn);
         super.issuerKeyPair = KeyUtil.generateRSAKeyPair();
         super.subjectValidity = 1;
         super.signatureAlg = "SHA256WithRSA";
         super.signatureAlgId = new AlgorithmIdentifier(PKCSObjectIdentifiers.sha256WithRSAEncryption);
-        super.policyOid = "2.5.29.32.0";
+        super.policyOid = policyOid;
     }
 
     @Override
-    public List<Extension> getSubjectExtensionList(AuthorityKeyIdentifier aki, SubjectPublicKeyInfo ski) throws IOException {
+    public List<Extension> getSubjectExtensionList(AuthorityKeyIdentifier aki, SubjectKeyIdentifier ski) throws IOException {
         List<Extension> extensionList = new ArrayList<>();
 
         // 1. authority key identifier

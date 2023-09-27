@@ -14,17 +14,17 @@ import java.util.List;
 
 public class FileUtil {
 
-    public void saveCertificate(String filePath, Certificate certificate) throws IOException, CertificateEncodingException {
+    public static void saveCertificate(String filePath, Certificate certificate) throws IOException, CertificateEncodingException {
         FileOutputStream fo = new FileOutputStream(filePath);
         fo.write(certificate.getEncoded());
         fo.close();
     }
 
-    public void saveCertificateList(String filePath, List<Certificate> certificateList) throws CertificateException, KeyStoreException, NoSuchAlgorithmException, IOException {
+    public static void saveCertificateList(String filePath, List<Certificate> certificateList) throws CertificateException, KeyStoreException, NoSuchAlgorithmException, IOException {
         saveCertificateList(filePath, certificateList, "");
     }
 
-    public void saveCertificateList(String filePath, List<Certificate> certificateList, String password) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
+    public static void saveCertificateList(String filePath, List<Certificate> certificateList, String password) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
         KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
         for (Certificate certificate : certificateList) {
             ks.setCertificateEntry(createAlias(certificate), certificate);
@@ -35,7 +35,7 @@ public class FileUtil {
         fo.close();
     }
 
-    private String createAlias(Certificate certificate) throws NoSuchAlgorithmException, CertificateEncodingException {
+    private static String createAlias(Certificate certificate) throws NoSuchAlgorithmException, CertificateEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         byte[] digest = md.digest(certificate.getEncoded());
         String alias = Base64.getEncoder().encodeToString(digest);
