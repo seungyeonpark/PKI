@@ -1,5 +1,6 @@
 package pki.common.util;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.KeyStore;
@@ -14,7 +15,10 @@ import java.util.List;
 
 public class FileUtil {
 
-    public static void saveCertificate(String filePath, Certificate certificate) throws IOException, CertificateEncodingException {
+    public static void saveCertificate(String path, Certificate certificate) throws IOException, CertificateEncodingException {
+        String projectRoot = System.getProperty("user.dir");
+        String filePath = projectRoot + File.separator + path;
+
         FileOutputStream fo = new FileOutputStream(filePath);
         fo.write(certificate.getEncoded());
         fo.close();

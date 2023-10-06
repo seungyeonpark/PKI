@@ -27,9 +27,9 @@ public class CertificateApplication {
 	public static final String caDn = "CN=Private CA, OU=Private Certificate Authority, O=Private Corp., C=KR";
 	public static final String userDn = "CN=sypark, O=Certification Authority, L=Seoul, C=KR";
 
-	public static final String rootCaCertPath = "\\Users\\User\\Desktop\\Project\\pki\\src\\main\\resources\\certificates\\root.cer";
-	public static final String caCertPath = "\\Users\\User\\Desktop\\Project\\pki\\src\\main\\resources\\certificates\\ca.cer";
-	public static final String userCertPath = "\\Users\\User\\Desktop\\Project\\pki\\src\\main\\resources\\certificates\\user.cer";
+	public static final String rootCaCertPath = "/certificates/root.cer";
+	public static final String caCertPath = "/certificates/ca.cer";
+	public static final String userCertPath = "/certificates/user.cer";
 
 	public static final String policyOid = "2.5.29.32.0"; // any policy
 
