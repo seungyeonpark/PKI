@@ -1,7 +1,37 @@
 # X.509 Public Key Infrastructure Certificate
 
-## 1. RFC5280
-### 1-1. Certificate and Certificate Extensions Profile
+## 1. Project
+### 1-1. Structure
+``` bash
+├── pki
+│   ├── certificate
+│   │   ├── BaseCertificate.java
+│   │   └── CustomCertificate.java
+│   ├── common
+│   │   └── entity
+│   │      ├── CaIssuer.java
+│   │      ├── Issuer.java
+│   │      └── RootCaIssuer.java
+│   │   └── util
+│   │      ├── FileUtil.java
+│   │      └── KeyUtil.java
+│   ├── csr
+│   │   └── CsrManager.java
+│   ├── validation
+│   │   └── PathValidator.java
+└────── CertificateApplication.java
+```
+
+### 1-2. Scenario (issuing certificate)
+1. Applicant generates a key pair
+2. Applicant generates a PKCS#10 structure. It mainly includes the subject information, public key generated in the above step
+3. The applicant signs the PKCS#10 using the private key generated in the above step.
+4. CA receives the PKCS#10
+5. CA first verifies the PKCS#10 signature with the public key placed in the PKCS#10. If the signature is verified successfully then it is a proof that the applicant has a possession of the corresponding private key.
+6. CA sends the final issued certificate along with the certificate chain to the applicant.
+
+## 2. RFC5280
+### 2-1. Certificate and Certificate Extensions Profile
 1. Basic Certificate Fields
    1. Certificate Fields
       1. tbsCertificate
@@ -34,7 +64,7 @@
    14. Inhibit anyPolicy
    15. Freshest CRL
 
-### 1-2. Certificate Path Validation
+### 2-2. Certificate Path Validation
 1. Basic Path Validation
    1. Inputs
    2. Initialization
@@ -45,10 +75,8 @@
 2. Using the Path Validation Algorithm
 3. CRL Validation
 
-## 2. PKCS#10 CSR
-
-## 3. Project Structure
-
-## 4. Project Detail
-
+## 3. PKCS#10 CSR
+1. A CertificationRequestInfo value containing a subject distinguished name, a subject public key, and optionally a set of attributes is constructed by an entity requesting certification.
+2. The CertificationRequestInfo value is signed with the subject entity's private key.
+3. The CertificationRequestInfo value, a signature algorithm identifier, and the entity's signature are collected together into a CertificationRequest value
 
